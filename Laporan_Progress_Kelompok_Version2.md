@@ -19,6 +19,8 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
+
 
 ---
 
@@ -35,6 +37,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -51,6 +54,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -67,6 +71,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -83,6 +88,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -99,6 +105,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -115,6 +122,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -132,6 +140,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -148,6 +157,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -164,6 +174,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -180,6 +191,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -196,6 +208,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -212,6 +225,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -228,6 +242,7 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
 
@@ -244,5 +259,6 @@
 - Kegiatan yang telah dilakukan.
 - Hambatan yang dihadapi.
 - Rencana tindak lanjut.
+- List komponen yang akan kalian pakai untuk membuat modul.
 
 ---
