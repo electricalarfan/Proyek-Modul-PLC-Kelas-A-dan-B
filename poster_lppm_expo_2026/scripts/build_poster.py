@@ -4,7 +4,7 @@ PowerPoint caps slide size at 56 in (142.24 cm), so the slide is built at 1:2
 scale (30 x 90 cm, same 1:3 ratio) and printed at 200 %. All geometry below is
 written in PRINT centimetres / PRINT points and halved on the way out.
 
-usage: build_poster.py <unpacked_dir> <penelitian|pengabdian> <header.png> <footer.png>
+usage: build_poster.py <unpacked_dir> <penelitian|pengabdian> <header.png> <footer.png> <logos_dir>
 """
 import copy
 import math
@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from lxml import etree
+from PIL import Image
 
 NS = {
     "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -183,7 +184,61 @@ def shape_xml(sid, name, x, y, w, h, fill, paras, anchor="ctr", ins=None, txbox=
     return etree.fromstring(xml)
 
 
-def build(root_dir, kind, header_png, footer_png):
+# --- logos (HD, placed as separate pictures on the master) -----------------------------
+LOGO_ROW = ["unib", "twh", "acquin", "blu"]        # top row, square-ish logos
+LOGO_ALT = {
+    "unib": "Logo Universitas Bengkulu",
+    "twh": "Logo Tut Wuri Handayani",
+    "acquin": "Logo ACQUIN",
+    "blu": "Logo BLU Universitas Bengkulu",
+    "lppm": "Logo LPPM Universitas Bengkulu",
+}
+LOGO_ZONE = (41.0, W - 0.6)        # x range right of the building art, print cm
+LOGO_S, LOGO_LPPM_H, LOGO_TOP, LOGO_ROW_GAP = 4.2, 3.8, 0.6, 0.5
+
+
+def pic_xml(pid, name, alt, rid, x, y, w, h):
+    return etree.fromstring(
+        f'<p:pic xmlns:p="{NS["p"]}" xmlns:a="{NS["a"]}" xmlns:r="{NS["r"]}">'
+        f'<p:nvPicPr><p:cNvPr id="{pid}" name="{name}" descr="{alt}"/>'
+        '<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr userDrawn="1"/></p:nvPicPr>'
+        f'<p:blipFill><a:blip r:embed="{rid}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>'
+        f'<p:spPr><a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm>'
+        '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>'
+    )
+
+
+def add_logos(d, tree, logos_dir):
+    """Copy the logo PNGs into the package, register them on the master, place them."""
+    rels_p = d / "ppt/slideMasters/_rels/slideMaster1.xml.rels"
+    rels = rels_p.read_text(encoding="utf8")
+    x0, x1 = LOGO_ZONE
+    gap = ((x1 - x0) - len(LOGO_ROW) * LOGO_S) / (len(LOGO_ROW) - 1)
+    placed = []
+    for i, key in enumerate(LOGO_ROW):
+        pw, ph = Image.open(Path(logos_dir) / f"{key}.png").size
+        a = pw / ph
+        w, h = LOGO_S * min(1.0, a), LOGO_S * min(1.0, 1.0 / a)
+        bx = x0 + i * (LOGO_S + gap)
+        placed.append((key, bx + (LOGO_S - w) / 2, LOGO_TOP + (LOGO_S - h) / 2, w, h))
+    pw, ph = Image.open(Path(logos_dir) / "lppm.png").size
+    lw = LOGO_LPPM_H * pw / ph
+    placed.append(("lppm", x0 + ((x1 - x0) - lw) / 2, LOGO_TOP + LOGO_S + LOGO_ROW_GAP, lw, LOGO_LPPM_H))
+
+    for n, (key, x, y, w, h) in enumerate(placed):
+        shutil.copyfile(Path(logos_dir) / f"{key}.png", d / f"ppt/media/logo_{key}.png")
+        rid = f"rId{101 + n}"
+        rels = rels.replace(
+            "</Relationships>",
+            f'<Relationship Id="{rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
+            f'Target="../media/logo_{key}.png"/></Relationships>',
+        )
+        tree.append(pic_xml(210 + n, f"Logo {key.upper()}", LOGO_ALT[key], rid, x, y, w, h))
+    rels_p.write_text(rels, encoding="utf8")
+    print("logos: " + ", ".join(f"{k} {w:.1f}x{h:.1f}cm@({x:.1f},{y:.1f})" for k, x, y, w, h in placed))
+
+
+def build(root_dir, kind, header_png, footer_png, logos_dir):
     cfg = KINDS[kind]
     dark, tint = cfg["dark"], cfg["tint"]
     print(f"{kind}: white-on-dark {contrast('FFFFFF', dark):.1f}:1, dark-on-tint {contrast(dark, tint):.1f}:1")
@@ -246,6 +301,7 @@ def build(root_dir, kind, header_png, footer_png):
         204, "Category Band", 0, HEADER_H, W, BAND_H, dark,
         [dict(text=cfg["label"], pt=150, color="FFFFFF", spc=int(1500 * SCALE))],
         ins=dict(lIns=0, rIns=0, tIns=0, bIns=0)))
+    add_logos(d, tree, logos_dir)
     save(mt, mp)
     shutil.copyfile(header_png, d / "ppt/media/image1.png")
     shutil.copyfile(footer_png, d / "ppt/media/image2.png")
@@ -398,4 +454,4 @@ def build(root_dir, kind, header_png, footer_png):
 
 
 if __name__ == "__main__":
-    build(*sys.argv[1:5])
+    build(*sys.argv[1:6])

@@ -41,18 +41,9 @@ def header(src, dst):
     alpha[:, xs] = a_b
     rgb[:, xs] = unmix(p[:, xs], a_b, blue)
 
-    # logos: key pure blue, unmix 2px edge band only
-    xl = slice(957, w)
-    pl = p[:, xl]
-    near = (pl[..., 0] < 40) & (pl[..., 1] < 40) & (pl[..., 2] > 215)
-    band = np.asarray(Image.fromarray((near * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0
-    band &= ~near
-    a_l = np.ones(near.shape)
-    a_l[near] = 0
-    est = np.clip(1 - (pl[..., 2] - np.maximum(pl[..., 0], pl[..., 1])) / 255.0, 0, 1)
-    a_l[band] = est[band]
-    alpha[:, xl] = a_l
-    rgb[:, xl] = np.where(band[..., None], unmix(pl, a_l, blue), pl)
+    # baked-in logos are dropped: the five HD logos are placed as separate pictures
+    alpha[:, 957:] = 0       # LPPM, Tut Wuri, ACQUIN, BLU
+    alpha[:100, 855:957] = 0  # UNIB emblem (sits above the building's right wing)
 
     alpha[:, :345] = 0      # baked event text -> replaced by live text
     alpha[0, :] = 0         # 1px grey rule along the top edge
